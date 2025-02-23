@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
+from api.models import Recipe
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,10 +15,14 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-# Recipe and Ingredient Serializers that work with respective models
-# (models haven't been defined yet, imagine they're there)
+# Recipe Serializer that works with the respective model
 
 class RecipeSerializer(serializers.ModelSerializer):
+    
+    name = serializers.CharField(min_length=1, max_length=100, allow_blank=False)
+    description = serializers.CharField(max_length=1000, allow_blank=True)
+    ingredients = serializers.ListField(allow_empty=False, min_length=1, max_length=50)
+    
     class Meta:
         model = Recipe
-        fields = [] # Model fields go there
+        fields = ['name', 'description', 'ingredients']
