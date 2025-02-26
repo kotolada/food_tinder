@@ -2,9 +2,6 @@
 
 echo "Starting entrypoint script..."
 
-echo "MYSQL_HOST: '$MYSQL_HOST'"
-echo "MYSQL_PORT: '$MYSQL_PORT'"
-
 # Wait for the database to be ready
 echo "Waiting for database..."
 while ! nc -z "$MYSQL_HOST" "$MYSQL_PORT"; do
