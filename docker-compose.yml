@@ -11,10 +11,10 @@ services:
     env_file:
       - ./.env
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
   web:
-    build: 
+    build:
       context: ./
       dockerfile: ./compose/Dockerfile
     container_name: django_backend
