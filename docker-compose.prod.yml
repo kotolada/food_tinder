@@ -1,18 +1,4 @@
 services:
-  db:
-    image: mysql:latest
-    container_name: mysql_db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    env_file:
-      - ./.env
-    ports:
-      - "3307:3306"
-
   web:
     build:
       context: ./
@@ -25,9 +11,7 @@ services:
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db/${MYSQL_DATABASE}
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_PORT: ${MYSQL_PORT}
-    depends_on:
-      - db
     ports:
-      - "8000:8000"
+      - "8005:8000"
     volumes:
       - ./:/app

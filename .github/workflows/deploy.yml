@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Copy files to server
+        run: rsync -a --delete \
+             --exclude=/.git/ \
+             --exclude=/.github/ \
+             --exclude=/.vscode/ \
+             --exclude=/.env.example \
+             --exclude=/.gitignore \
+             ./ lada_kot@${{ secrets.SERVER_IP }}:~
+
+      - name: Start new app
+        run: |
+          ssh lada_kot@${{ secrets.SERVER_IP }} << 'EOF'
+            docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+            docker container prune -f
+            docker image prune -af
+          EOF
