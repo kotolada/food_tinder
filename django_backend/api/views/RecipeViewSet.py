@@ -1,41 +1,11 @@
 from django.shortcuts import render
-from django.contrib.auth.models import Group, User
-from rest_framework import permissions, viewsets, status
-from rest_framework.response import Response
-from tutorial.quickstart.serializers import GroupSerializer, UserSerializer
-from api.models import Recipe
-from api.serializers import RecipeSerializer
+from rest_framework import viewsets, status
+from api.models.Recipe import Recipe
+from api.serializers.RecipeSerializer import RecipeSerializer
 from rest_framework.exceptions import ValidationError
-from rest_framework.viewsets import ViewSet
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from api.services import AuthService
-from api.serializers import CreateUser
-
-class AuthView(ViewSet):
-    @action(detail=False, methods=['post'])
-    def create_user(self, request):
-        dto = CreateUser(data=request.data)
-
-        AuthService.create_by_creds(dto)
-        return Response(request.data)
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all().order_by('name')
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
@@ -60,7 +30,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
-        
+                
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
