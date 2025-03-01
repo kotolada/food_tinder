@@ -2,6 +2,9 @@ services:
   web:
     build:
       context: ./
+      args:
+        USER_ID: "${UID}"
+        GROUP_ID: "${GID}"
       dockerfile: ./compose/Dockerfile
     container_name: django_backend
     command: python django_backend/manage.py runserver 0.0.0.0:8000
