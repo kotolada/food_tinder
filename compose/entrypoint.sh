@@ -4,9 +4,9 @@ echo "Starting entrypoint script..."
 
 # Wait for the database to be ready
 echo "Waiting for database..."
-while ! nc -z "$MYSQL_HOST" "$MYSQL_PORT"; do
-  sleep 1
-done
+while ! nc -z "$MYSQL_HOST" "$MYSQL_PORT";
+  do sleep 1
+  done
 echo "Database is ready."
 
 # Apply database migrations

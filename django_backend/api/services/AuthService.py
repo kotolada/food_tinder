@@ -1,8 +1,11 @@
-from api.serializers import CreateUserSerializer
+from api.serializers.CreateUserSerializer import CreateUserSerializer
+from django.contrib.auth.models import User
+from typing import cast
 
 
 class AuthService:
-    def create_by_creds(data: CreateUserSerializer):
+    @staticmethod
+    def create_by_creds(data: CreateUserSerializer) -> User:
         data.is_valid(raise_exception=True)
         data.save()
-        return data # comment
+        return cast(User, data.instance)
