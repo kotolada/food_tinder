@@ -13,13 +13,13 @@ class RecipeViewSet(viewsets.ModelViewSet[Recipe]):
     queryset: QuerySet[Recipe] = Recipe.objects.all()
     serializer_class: type[RecipeSerializer] = RecipeSerializer
 
-    def list(self, request: Request) -> Response:
+    def list(self, _request: Request) -> Response:
         recipes = Recipe.objects.all()
         serializer = RecipeSerializer(recipes, many=True)
         return Response(serializer.data)
 
 
-    def retrieve(self, request: Request, pk: int) -> Response:
+    def retrieve(self, _request: Request, pk: int) -> Response:
         recipes = Recipe.objects.get(id=pk)
         serializer = RecipeSerializer(recipes, many=False)
         return Response(serializer.data)
@@ -36,7 +36,7 @@ class RecipeViewSet(viewsets.ModelViewSet[Recipe]):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-    def destroy(self, request: Request, pk: int) -> Response:
+    def destroy(self, _request: Request, pk: int) -> Response:
         recipe = Recipe.objects.get(id=pk)
         recipe.delete()
         return Response('Recipe successfully deleted')
